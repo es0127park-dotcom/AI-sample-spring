@@ -1,38 +1,68 @@
-# 프로젝트 코드 컨벤션 (Code Rules)
+# 코드 컨벤션 요약
 
-이 문서는 `demo` 프로젝트의 일관된 코드 작성을 위한 규칙을 정의합니다.
+## 패키지 구조
 
-## 1. 아키텍처 및 패키지 구조
-- **기능 기반 패키징 (Package by Feature):** `board`, `user` 등 기능 단위로 패키지를 구성합니다.
-- **계층 구조:** 각 기능 패키지 내부에는 `Controller`, `Service`, `Repository`, `Entity`, `Request DTO`, `Response DTO`가 포함됩니다.
+도메인 기준 플랫 구조: `_core/`, `board/`, `user/` ...
 
-## 2. 엔티티 (Entity) 규칙
-- **테이블 명명:** `@Table(name = "xxx_tb")` 형식을 사용합니다.
-- **기본키 (PK):** `Integer id` 타입을 사용하며, `@GeneratedValue(strategy = GenerationType.IDENTITY)`를 적용합니다.
-- **Lombok 사용:** `@NoArgsConstructor`, `@Data`, `@Builder`를 기본적으로 사용합니다.
-- **연관관계:** 모든 연관관계는 `FetchType.LAZY`로 설정합니다. (OSIV는 `false`로 유지)
-- **생성자 규칙:** `@Builder`를 사용할 때 컬렉션 필드는 생성자에 포함하지 않습니다.
-- **시간 설정:** `@CreationTimestamp`와 `LocalDateTime`을 사용하여 생성 시간을 관리합니다.
+각 도메인 폴더에 Entity, Controller, ApiController, Service, Repository, Request, Response 포함
 
-## 3. 컨트롤러 (Controller) 규칙
-- **어노테이션:** `@Controller`를 사용합니다.
-- **의존성 주입:** `@RequiredArgsConstructor`와 `private final` 필드를 사용하여 주입합니다.
-- **반환 타입:** 뷰 이름을 `String`으로 반환하여 머스테치(Mustache) 템플릿과 연결합니다.
+## 어노테이션 순서
 
-## 4. 서비스 (Service) 규칙
-- **어노테이션:** `@Service`를 사용합니다.
-- **트랜잭션:** 클래스 상단에 `@Transactional(readOnly = true)`를 선언하여 읽기 전용을 기본으로 하고, 변경 작업에만 별도로 `@Transactional`을 적용합니다.
-- **DTO 변환:** DTO는 Service 레이어에서 생성하여 반환합니다. **Entity를 Controller로 전달하지 않습니다.**
+| 레이어         | 순서                                                                        |
+| -------------- | --------------------------------------------------------------------------- |
+| Entity         | `@NoArgsConstructor` → `@Data` → `@Entity` → `@Table(name = "{도메인}_tb")` |
+| Service        | `@Transactional(readOnly = true)` → `@RequiredArgsConstructor` → `@Service` |
+| Controller     | `@RequiredArgsConstructor` → `@Controller`                                  |
+| RestController | `@RequiredArgsConstructor` → `@RestController` (별도 파일, `/api` 접두사)   |
 
-## 5. 레포지토리 (Repository) 규칙
-- **상속:** `JpaRepository<Entity, Integer>`를 상속받는 인터페이스로 구현합니다.
+## Entity 규칙
 
-## 6. DTO (Request/Response) 규칙
-- **내부 클래스 활용:** `BoardRequest`, `BoardResponse`와 같은 대표 클래스 내부에 `static class`를 사용하여 각 기능별 DTO(Save, Detail 등)를 정의합니다.
-- **명명 규칙:** 
-    - 요청 DTO: 기능명을 명시합니다. (예: `Save`, `Update`)
-    - 응답 DTO: 데이터의 성격을 명시합니다. (예: `Detail`, `List`)
-- **Lombok:** DTO에는 `@Data`를 사용합니다.
+- PK 타입: `Integer`, 전략: `GenerationType.IDENTITY`
+- `@Builder`는 생성자에 선언 (클래스 레벨 금지), 컬렉션 필드 제외
+- 모든 연관관계: `FetchType.LAZY`
+- 생성일: `@CreationTimestamp` + `LocalDateTime createdAt`
 
-## 7. 기타 규칙
-- **공통 응답:** `_core` 패키지의 유틸리티를 활용하여 일관된 응답 형식을 유지합니다.
+## Service 규칙
+
+- 클래스 레벨 `@Transactional(readOnly = true)`, 쓰기 메서드만 `@Transactional`
+- DTO는 Service에서 생성 → Controller로 Entity 직접 전달 금지
+
+## Controller 규칙
+
+- SSR: `{Domain}Controller` → Mustache 템플릿 경로 반환
+- REST: `{Domain}ApiController` → `Resp.ok(body)` / `Resp.fail(status, msg)` 반환
+- SSR과 REST는 반드시 별도 파일로 분리
+
+## DTO 규칙
+
+- `{Domain}Request.java` — 내부 static class를 기능명으로 (`Save`, `Update`)
+- `{Domain}Response.java` — 내부 static class를 용도명으로 (`Detail`, `Items`)
+- 외부 클래스: 어노테이션 없음 / 내부 클래스: `@Data`
+- Entity → DTO 변환: 생성자 또는 정적 팩토리 메서드
+
+## 공통 응답
+
+`_core/utils/Resp.java` — REST API는 반드시 `Resp<T>` 래퍼 사용
+
+## 프론트 (JS) 규칙
+
+- Ajax(fetch)는 `async` / `await` 사용
+- DOM 접근: `document.querySelector` 사용
+- POST 요청 기본: `<form>` 태그 + `name` 속성으로 제출 (페이지 이동 방식)
+- Ajax가 필요한 경우만 fetch 사용 (중복체크, 부분 갱신 등)
+
+## 네이밍
+
+| 대상        | 규칙               | 예시             |
+| ----------- | ------------------ | ---------------- |
+| 클래스/파일 | PascalCase         | `BoardService`   |
+| 메서드/변수 | camelCase          | `findAll`        |
+| 테이블      | snake_case + `_tb` | `board_tb`       |
+| 패키지      | lowercase          | `board`, `_core` |
+
+## 설정
+
+- OSIV: `false`
+- Fetch: 전부 `LAZY`
+- Batch: `default_batch_fetch_size=10`
+- 인증: `HttpSession`
