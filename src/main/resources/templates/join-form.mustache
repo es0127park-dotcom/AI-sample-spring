@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+</head>
+<body>
+<h1>회원가입 페이지</h1>
+<hr/>
+
+<form action="/join" method="post">
+    <input type="text" name="username" id="username" placeholder="Enter username">
+    <button type="button" onclick="checkUsername()">중복확인</button>
+    <span id="username-check-msg"></span>
+    <br>
+    <input type="password" name="password" placeholder="Enter password">
+    <br>
+    <input type="email" name="email" placeholder="Enter email">
+    <br>
+    <button>회원가입</button>
+</form>
+
+<script>
+    async function checkUsername() {
+        // 1. DOM에서 입력값 수집
+        let username = document.querySelector("#username").value;
+        let usernameCheckMsgEl = document.querySelector("#username-check-msg");
+
+        // 2. API 호출
+        try {
+            let response = await fetch(`/api/users/username-check?username=${username}`);
+            let result = await response.json();
+
+            // 3. 응답 분기
+            if (result.body) { // true 이면 중복
+                usernameCheckMsgEl.innerHTML = "이미 사용중인 아이디입니다.";
+                usernameCheckMsgEl.style.color = "red";
+            } else { // false 이면 사용 가능
+                usernameCheckMsgEl.innerHTML = "사용 가능한 아이디입니다.";
+                usernameCheckMsgEl.style.color = "blue";
+            }
+        } catch (error) {
+            alert("통신 오류가 발생했습니다: " + error);
+        }
+    }
+</script>
+
+</body>
+</html>

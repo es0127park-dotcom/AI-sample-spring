@@ -41,6 +41,29 @@
 
 ### 4. 프론트 (Mustache + JS)
 
-- 회원가입 페이지에서 username 입력란 옆 "중복확인" 버튼
-- fetch로 `/api/users/username-check?username=xxx` 호출
-- 응답에 따라 "사용 가능" / "이미 사용중" 메시지 표시
+#### 4-1. 회원가입 페이지 생성 (ajax-skill 사용)
+
+- 파일: `templates/user/join.mustache`
+
+#### 4-2. JS 함수 (ajax-skill 사용)
+
+#### 4-3. 응답 예시
+
+```json
+// username이 이미 존재할 때
+{ "status": 200, "msg": "성공", "body": true }
+
+// username이 없을 때 (사용 가능)
+{ "status": 200, "msg": "성공", "body": false }
+```
+
+#### 4-4. SSR 라우트 추가
+
+- `UserController`에 회원가입 페이지 이동 메서드 추가
+
+```java
+@GetMapping("/users/join")
+public String joinForm() {
+    return "user/join";
+}
+```
