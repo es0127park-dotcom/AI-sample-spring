@@ -1,1 +1,1 @@
-AI-GUIDE 읽어
+AI-GUIDE.md 읽어
