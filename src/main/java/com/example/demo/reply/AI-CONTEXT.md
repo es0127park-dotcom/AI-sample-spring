@@ -19,3 +19,14 @@
 
 - 게시글(`Board`)과 회원(`User`)에 대한 연관관계를 `LAZY`로 유지할 것.
 - 댓글 작성 시 부모 게시글 존재 여부를 반드시 검증할 것.
+
+## 테스트
+
+- `ReplyRepositoryTest`: DB 연동 테스트.
+
+## 의존성
+
+- 내부: `board` 및 `user` 도메인 참조.
+- 외부: Spring Data JPA.
+
+<!-- MANUAL -->

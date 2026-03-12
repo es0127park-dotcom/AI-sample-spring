@@ -21,3 +21,15 @@
 
 - 비밀번호 등 민감 정보는 엔티티에서 `@Column` 설정을 통해 노출을 제어하거나 DTO 변환 시 제외할 것.
 - `HttpSession`을 주입받아 인증 상태를 관리할 것 (Security 사용 전까지).
+
+## 테스트
+
+- `UserRepositoryTest`: 회원 조회 및 가입 테스트.
+- `UserServiceTest`: 로그인 성공/실패 시나리오 테스트.
+
+## 의존성
+
+- 내부: 없음 (독립적인 사용자 관리).
+- 외부: Spring Boot Starter Web, JPA.
+
+<!-- MANUAL -->

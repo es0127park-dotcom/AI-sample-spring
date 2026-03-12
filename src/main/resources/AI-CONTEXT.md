@@ -16,3 +16,13 @@
 
 - `application.properties`에서 OSIV 설정이 `false`인지 항상 확인할 것.
 - `data.sql`은 애플리케이션 시작 시 데이터 초기화에 사용됨.
+
+## 테스트
+
+- 리소스 파일 자체에 대한 테스트는 수행하지 않으나, 템플릿 렌더링 결과 확인을 위한 통합 테스트에 사용됨.
+
+## 의존성
+
+- 외부: Spring Boot Resource Loader.
+
+<!-- MANUAL -->

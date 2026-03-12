@@ -22,3 +22,15 @@
 - 모든 연관관계(예: User)는 `LAZY` 로딩으로 설정됨.
 - 조회 시 `default_batch_fetch_size` 설정을 활용하여 N+1 문제를 방지할 것.
 - 서비스에서 엔티티를 직접 컨트롤러로 반환하지 말고, 반드시 DTO로 변환하여 반환할 것.
+
+## 테스트
+
+- `BoardRepositoryTest`: DB 연동 테스트 (DataJpaTest)
+- `BoardServiceTest`: 비즈니스 로직 테스트 (Mock기반)
+
+## 의존성
+
+- 내부: `user` 도메인의 `User` 엔티티를 참조 (연관관계).
+- 외부: Spring Data JPA, Lombok.
+
+<!-- MANUAL -->
