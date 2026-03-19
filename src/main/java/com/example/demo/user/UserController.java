@@ -28,4 +28,10 @@ public class UserController {
     public String joinForm() {
         return "user/join-form";
     }
+
+    // 로그인 페이지 반환
+    @GetMapping("/login-form")
+    public String loginForm() {
+        return "user/login-form";
+    }
 }
