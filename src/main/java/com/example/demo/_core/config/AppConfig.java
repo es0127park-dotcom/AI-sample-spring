@@ -16,10 +16,10 @@ public class AppConfig {
         return new BCryptPasswordEncoder();
     }
 
+    // H2 콘솔 서블릿 수동 등록 (Spring Boot 3.x/4.x - Jakarta EE)
     @Bean
     public ServletRegistrationBean<JakartaWebServlet> h2ConsoleServlet() {
-        ServletRegistrationBean<JakartaWebServlet> bean = new ServletRegistrationBean<>(new JakartaWebServlet(),
-                "/h2-console/*");
+        ServletRegistrationBean<JakartaWebServlet> bean = new ServletRegistrationBean<>(new JakartaWebServlet(), "/h2-console/*");
         bean.setLoadOnStartup(1);
         return bean;
     }

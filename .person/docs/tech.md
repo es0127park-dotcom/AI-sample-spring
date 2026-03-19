@@ -4,9 +4,9 @@
 
 ### 1.1 Backend
 - **Language**: Java 21
-- **Framework**: Spring Boot 3.3.4
+- **Framework**: Spring Boot 4.0.3
 - **Build Tool**: Gradle
-- **Security**: HttpSession 기반 인증 (JWT 확장 가능)
+- **Security**: HttpSession 기반 인증, Security 사용안함. 인터셉터 인증
 - **View Engine**: Mustache (Server-Side Rendering)
 
 ### 1.2 Data & Persistence
