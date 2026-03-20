@@ -1,0 +1,26 @@
+{{> layout/header}}
+
+<div class="container my-3">
+    <table class="table table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#boardList}}
+            <tr>
+                <td>{{id}}</td>
+                <td>{{title}}</td>
+                <td>
+                    <a href="/board/{{id}}" class="btn btn-warning btn-sm">상세보기</a>
+                </td>
+            </tr>
+        {{/boardList}}
+        </tbody>
+    </table>
+</div>
+
+{{> layout/footer}}
