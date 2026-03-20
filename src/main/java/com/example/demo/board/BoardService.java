@@ -16,8 +16,12 @@ import lombok.RequiredArgsConstructor;
 public class BoardService {
     private final BoardRepository boardRepository;
 
-    public List<BoardResponse.ListDTO> 게시글목록보기() {
-        List<Board> boards = boardRepository.findAllOrderByCreatedByDesc();
+    public List<BoardResponse.ListDTO> 게시글목록보기(int page) {
+        int size = 3; // 한페이지에 보여줄 개수 (limit = size)
+        int limit = size;
+        int offset = page * size; // 시작 인덱스
+
+        List<Board> boards = boardRepository.findAll(limit, offset);
         return boards.stream().map(BoardResponse.ListDTO::new).toList();
     }
 }

@@ -8,8 +8,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface BoardRepository extends JpaRepository<Board, Integer> {
-    @Query("select b from Board b order by b.id desc")
-    List<Board> findAllOrderByCreatedByDesc();
+    @Query("SELECT b FROM Board b ORDER BY b.id DESC LIMIT :limit OFFSET :offset")
+    List<Board> findAll(@Param("limit") int limit, @Param("offset") int offset);
 
     @Modifying
     @Query("delete from Board b where b.user.id = :userId")
